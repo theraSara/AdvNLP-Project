@@ -153,7 +153,6 @@ source("LME/run_coverage_controlled.R")
 The final notebook should focus on the report-facing analyses only.
 
 ```text
-lme_summary.ipynb
 final_analysis.ipynb
 ```
 
