@@ -119,15 +119,7 @@ To benchmark SwP on the same dataset and model structure, run:
 
 ```r
 source("LME/benchmark_utils.R")
-
-run_benchmark(
-  input_csv = "data_output/master_modeling_data_17k_nltk_with_swp.csv",
-  predictor_col = "swp_surprisal_bits",
-  predictor_label = "swp",
-  output_dir = file.path("regression_output", "filtered_17k", "primary_uni", "swp")
-)
 ```
-
 This produces the **full-benchmark SwP result** reported in the paper.
 
 ---
@@ -150,7 +142,7 @@ source("LME/run_coverage_controlled.R")
 
 ## Notebook
 
-The final notebook should focus on the report-facing analyses only.
+The final notebook should focus solely on report-facing analyses.
 
 ```text
 final_analysis.ipynb
