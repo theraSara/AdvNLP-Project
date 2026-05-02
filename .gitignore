@@ -11,3 +11,9 @@ surprisal_1000_top-k/
 output/
 data_output_prev/
 data_output/
+analysis_exports/
+predictive_power/
+visual/
+filtered_data/
+data_processing/
+

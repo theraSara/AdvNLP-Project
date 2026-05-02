@@ -13,7 +13,7 @@ run_model() {
     echo "Parameters: Top-K = $K_VAL | Batch Size = $BATCH_SIZE"
 
     python surprisal/lm_surprisal.py \
-        --input_csv data_output/bk21_stimuli_final.csv \
+        --input_csv data/bk21_stimuli_final.csv \
         --output_csv "data_output/bk21_with_${NAME}.csv" \
         --model_id "$MODEL_ID" \
         --k "$K_VAL" \

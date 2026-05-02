@@ -181,3 +181,127 @@ def compute_bi_surprisal_word_batched(
             bi_val = 0.0
 
     return bi_val
+
+
+def compute_bi_candidate_distribution(
+    model,
+    tokenizer,
+    prefix,
+    target,
+    suffix,
+    candidate_groups,
+    candidate_word_set,
+    device,
+    cand_batch_size=128,
+    top_k=5,
+):
+    """
+    Compute the word-level cloze posterior distribution:
+        P(w | prefix, suffix)
+        ∝ P(w, suffix | prefix)
+
+    Returns a summary containing:
+        - target_word
+        - target_rank
+        - target_prob
+        - entropy_bits
+        - top_words
+        - top_probs
+
+    Notes:
+    - This uses the same whole-word scoring logic as the corrected
+      bidirectional surprisal implementation.
+    - Candidate words may tokenize into multiple tokens.
+    """
+    if pd.isna(prefix) or pd.isna(target):
+        return None
+
+    prefix_str = str(prefix).rstrip()
+    target_word = str(target).strip()
+    suffix_text = "" if pd.isna(suffix) else str(suffix).strip()
+    suffix_str = (" " + suffix_text) if suffix_text else ""
+
+    prefix_ids = tokenizer(
+        prefix_str,
+        return_tensors="pt",
+        add_special_tokens=True
+    ).input_ids.to(device)
+
+    suffix_ids = tokenizer(
+        suffix_str,
+        return_tensors="pt",
+        add_special_tokens=False
+    ).input_ids.to(device)
+
+    all_words = []
+    all_logps_chunks = []
+
+    for tok_len in sorted(candidate_groups.keys()):
+        group = candidate_groups[tok_len]
+        ids_list = group["ids"]
+        words_list = group["words"]
+
+        for start in range(0, len(ids_list), cand_batch_size):
+            end = min(start + cand_batch_size, len(ids_list))
+            batch_ids = ids_list[start:end]
+            batch_words = words_list[start:end]
+
+            cand_ids_batch = torch.cat(batch_ids, dim=0)
+            batch_lp = score_candidate_batch(
+                model=model,
+                prefix_ids=prefix_ids,
+                cand_ids_batch=cand_ids_batch,
+                suffix_ids=suffix_ids,
+            )
+
+            all_words.extend(batch_words)
+            all_logps_chunks.append(batch_lp.detach().cpu())
+
+    if target_word not in candidate_word_set:
+        target_ids = tokenizer(
+            " " + target_word,
+            return_tensors="pt",
+            add_special_tokens=False
+        ).input_ids.to(device)
+
+        target_lp = score_candidate_batch(
+            model=model,
+            prefix_ids=prefix_ids,
+            cand_ids_batch=target_ids,
+            suffix_ids=suffix_ids,
+        )
+
+        all_words.append(target_word)
+        all_logps_chunks.append(target_lp.detach().cpu())
+
+    if len(all_words) == 0:
+        return None
+
+    all_logps = torch.cat(all_logps_chunks).double()
+
+    log_den = torch.logsumexp(all_logps, dim=0)
+    log_post = all_logps - log_den
+    probs = torch.exp(log_post)
+
+    sorted_idx = torch.argsort(probs, descending=True)
+    sorted_words = [all_words[i] for i in sorted_idx.tolist()]
+    sorted_probs = probs[sorted_idx].tolist()
+
+    target_rank = None
+    target_prob = None
+    for rank, idx in enumerate(sorted_idx.tolist(), start=1):
+        if all_words[idx] == target_word:
+            target_rank = rank
+            target_prob = probs[idx].item()
+            break
+
+    entropy_bits = -torch.sum(probs * (log_post / math.log(2))).item()
+
+    return {
+        "target_word": target_word,
+        "target_rank": target_rank,
+        "target_prob": target_prob,
+        "entropy_bits": entropy_bits,
+        "top_words": sorted_words[:top_k],
+        "top_probs": sorted_probs[:top_k],
+    }

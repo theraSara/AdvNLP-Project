@@ -2,7 +2,6 @@ import os
 import argparse
 import traceback
 
-import torch
 import pandas as pd
 from tqdm import tqdm
 
@@ -27,10 +26,10 @@ from scoring import (
 
 
 def run_for_model_and_mode(model_id, lexicon_mode, args):
-    print("=" * 90)
+    print("*" * 90)
     print(f"RUNNING MODEL: {model_id}")
     print(f"LEXICON MODE : {lexicon_mode}")
-    print("=" * 90)
+    print("*" * 90)
 
     df = pd.read_csv(args.input_csv)
 

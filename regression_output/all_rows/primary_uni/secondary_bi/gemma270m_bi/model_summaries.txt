@@ -1,0 +1,142 @@
+Predictor: gemma270m_bi_surprisal 
+Predictor label: gemma270m_bi 
+
+=== m_base ===
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: base_formula
+   Data: df_model
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1244.6    1297.1    -616.3    1232.6     46086 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5169 -0.6542 -0.1318  0.5474  4.6143 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ SUB      (Intercept) 0.103130 0.32114 
+ ITEM     (Intercept) 0.004106 0.06408 
+ Residual             0.057731 0.24027 
+Number of obs: 46092, groups:  SUB, 216; ITEM, 216
+
+Fixed effects:
+                 Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)      6.729759   0.048018 319.751614 140.150   <2e-16 ***
+word_length      0.008417   0.003916 214.891040   2.149   0.0327 *  
+word_frequency  -0.001049   0.007731 215.030424  -0.136   0.8922    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) wrd_ln
+word_length -0.558       
+word_frqncy -0.789  0.211
+
+=== m_cloze ===
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: cloze_formula
+   Data: df_model
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1199.2    1260.4    -592.6    1185.2     46085 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5168 -0.6538 -0.1314  0.5493  4.6226 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ SUB      (Intercept) 0.103130 0.32114 
+ ITEM     (Intercept) 0.004103 0.06405 
+ Residual             0.057671 0.24015 
+Number of obs: 46092, groups:  SUB, 216; ITEM, 216
+
+Fixed effects:
+                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)      6.718e+00  4.804e-02  3.206e+02 139.854  < 2e-16 ***
+cloze_surprisal  2.795e-03  4.057e-04  4.580e+04   6.887 5.76e-12 ***
+word_length      8.346e-03  3.914e-03  2.149e+02   2.132   0.0341 *  
+word_frequency  -8.011e-04  7.728e-03  2.150e+02  -0.104   0.9175    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) clz_sr wrd_ln
+cloz_srprsl -0.036              
+word_length -0.558 -0.003       
+word_frqncy -0.789  0.005  0.211
+
+=== m_pred ===
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: pred_formula
+   Data: df_model
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1211.6    1272.7    -598.8    1197.6     46085 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5132 -0.6544 -0.1315  0.5479  4.6298 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ SUB      (Intercept) 0.103130 0.32114 
+ ITEM     (Intercept) 0.004142 0.06436 
+ Residual             0.057684 0.24018 
+Number of obs: 46092, groups:  SUB, 216; ITEM, 216
+
+Fixed effects:
+                        Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)            6.704e+00  4.837e-02 3.239e+02 138.576  < 2e-16 ***
+gemma270m_bi_surprisal 2.432e-03  4.105e-04 3.728e+04   5.925 3.15e-09 ***
+word_length            9.079e-03  3.933e-03 2.150e+02   2.308   0.0219 *  
+word_frequency         1.979e-03  7.779e-03 2.166e+02   0.254   0.7994    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) g270__ wrd_ln
+gmm270m_b_s -0.091              
+word_length -0.559  0.028       
+word_frqncy -0.791  0.066  0.212
+
+=== m_both ===
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: both_formula
+   Data: df_model
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1199.6    1269.5    -591.8    1183.6     46084 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5156 -0.6537 -0.1311  0.5492  4.6258 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ SUB      (Intercept) 0.10313  0.32114 
+ ITEM     (Intercept) 0.00411  0.06411 
+ Residual             0.05767  0.24014 
+Number of obs: 46092, groups:  SUB, 216; ITEM, 216
+
+Fixed effects:
+                        Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)            6.712e+00  4.829e-02 3.258e+02 138.998  < 2e-16 ***
+cloze_surprisal        2.237e-03  5.995e-04 3.538e+04   3.732  0.00019 ***
+gemma270m_bi_surprisal 7.653e-04  6.064e-04 2.143e+04   1.262  0.20696    
+word_length            8.569e-03  3.921e-03 2.156e+02   2.185  0.02996 *  
+word_frequency         1.023e-04  7.767e-03 2.184e+02   0.013  0.98951    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) clz_sr g270__ wrd_ln
+cloz_srprsl  0.047                     
+gmm270m_b_s -0.096 -0.736              
+word_length -0.559 -0.035  0.045       
+word_frqncy -0.791 -0.065  0.092  0.214
