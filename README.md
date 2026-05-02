@@ -113,7 +113,7 @@ source("LME/run_all_data.R")
 
 ---
 
-## 6. SwP benchmark on the same framework
+## SwP benchmark on the same framework
 
 To benchmark SwP on the same dataset and model structure, run:
 
@@ -148,7 +148,7 @@ source("LME/run_coverage_controlled.R")
 
 ---
 
-## 9. Notebook
+## Notebook
 
 The final notebook should focus on the report-facing analyses only.
 
